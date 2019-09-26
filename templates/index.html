@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block head %}<title>Food database</title> {%
+endblock %} {% block body %}
+<div class="content">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">Food</th>
+            <th scope="col">Category</th>
+            <th scope="col">Score</th>
+            <th scope="col">Delete</th>
+        </tr>
+        {% for food in foods %}
+        <tr>
+            <td>{{ food.name }}</td>
+            <td>{{ food.category }}</td>
+            <td>{{ food.score }}</td>
+            <td>
+                <form action="/delete/{{ food.id }}" method="POST">
+                    <button name="delete" value="{{ food.id }}">delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </thead>
+        <tbody>
+        <ul>
+
+        </ul>
+        </tbody>
+    </table>
+    <form action="/" method="POST">
+        <label>Food:</label> <input type="text" name="food" id="food"/>
+        <label>Category:</label> <input type="text" name="category" id="category"/>
+        <label>Score:</label><input type="text" name="score" id="score"/>
+
+        <input type="submit" value="add food"/>
+    </form>
+</div>
+{% endblock %}
