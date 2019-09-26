@@ -2,7 +2,8 @@ from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost:3306/lunch_box'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost:3306/lunch_box'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lunchbox'
 
 db = SQLAlchemy(app)
 
