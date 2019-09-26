@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/weiweijin/Documents/python/Lunch Box/env/bin/python3.7" "$0" "$@"
+'''exec' "/Users/weiweijin/Documents/python/Lunch Box/env/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
