@@ -21,7 +21,7 @@ class Foods(db.Model):
         self.score = score
 
     def __repr__(self):
-        return f"{self.id}---{self.name}"
+        return f"{self.id}---{self.name} test"
 
 
 @app.route("/", methods=['POST', 'GET'])
