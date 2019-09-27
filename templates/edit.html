@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block head %}<title>Food database</title> {%
+endblock %} {% block body %}
+<div class="content">
+
+    <form action="/edit/{{food.id}}" method="POST">
+        <label>Food:</label> <input type="text" name="name" id="name" value="{{food.name}}"/>
+        <label>Category:</label> <input type="text" name="category" id="category" value="{{food.category}}"/>
+        <label>Score:</label><input type="text" name="score" id="score" value="{{food.score}}"/>
+
+        <input type="submit" value="Save changes"/>
+    </form>
+</div>
+{% endblock %}

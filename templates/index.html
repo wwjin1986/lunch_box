@@ -8,6 +8,7 @@ endblock %} {% block body %}
             <th scope="col">Category</th>
             <th scope="col">Score</th>
             <th scope="col">Delete</th>
+            <th scope="col">Edit</th>
         </tr>
         {% for food in foods %}
         <tr>
@@ -17,6 +18,11 @@ endblock %} {% block body %}
             <td>
                 <form action="/delete/{{ food.id }}" method="POST">
                     <button name="delete" value="{{ food.id }}">delete</button>
+                </form>
+            </td>
+             <td>
+                <form action="/edit/{{ food.id }}" method="GET">
+                    <button name="edit" value="{{ food.id }}">Edit</button>
                 </form>
             </td>
         </tr>

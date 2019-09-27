@@ -45,7 +45,7 @@ def index():
             return str(ex)
 
 
-@app.route("/delete/<int:id>", methods=['POST'])
+@app.route("/delete/<int:id>", methods=['GET', 'POST'])
 def delete(id):
     food_to_delete = Foods.query.get_or_404(id)
     try:
@@ -56,5 +56,21 @@ def delete(id):
         return str(ex)
 
 
+@app.route("/edit/<int:id>", methods=['POST', 'GET'])
+def edit(id):
+    food = Foods.query.get_or_404(id)
+    if request.method == 'GET':
+        return render_template("edit.html", food=food)
+    elif request.method == 'POST':
+        food.name = request.form['name']
+        food.category = request.form['category']
+        food.score = request.form['score']
+        try:
+            db.session.commit()
+            return redirect('/')
+        except Exception as ex:
+            return str(ex)
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
