@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b2c5ab0b706469:4f18c1be@us-cdbr-iron-east-02.cleardb.net/heroku_807af437c637ea5'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lunchbox'
 
 db = SQLAlchemy(app)
 
