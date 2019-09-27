@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b2c5ab0b706469:4f18c1be@us-cdbr-iron-east-02.cleardb.net/heroku_807af437c637ea5'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b4afdf249e41b5:2df06650@us-cdbr-iron-east-02.cleardb.net/heroku_9e117b96381e622?reconnect=true'
 
 db = SQLAlchemy(app)
 
