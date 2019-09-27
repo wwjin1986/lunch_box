@@ -1,9 +1,9 @@
-from flask import Flask, render_template,  request, redirect
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b4afdf249e41b5:2df06650@us-cdbr-iron-east-02.cleardb.net/heroku_9e117b96381e622'
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b4afdf249e41b5:2df06650@us-cdbr-iron-east-02.cleardb.net/heroku_9e117b96381e622'
 
 db = SQLAlchemy(app)
 
@@ -21,6 +21,10 @@ class Foods(db.Model):
 
     def __repr__(self):
         return f"{self.id}---{self.name} test"
+
+
+db.create_all()
+db.session.commit()
 
 
 @app.route("/", methods=['POST', 'GET'])
