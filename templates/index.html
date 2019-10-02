@@ -1,5 +1,33 @@
 {% extends 'base.html' %} {% block head %}<title>Food database</title> {%
 endblock %} {% block body %}
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript>
+      var score = 0;
+       $(document).ready(function(){
+       $('.checkbox').on('change',function(){
+       var checkboxId = $(this).attr('id');
+       var checkboxScore = $(this).attr('score');
+       var checkboxItem = $(this).attr('checkbox-item');
+       if($('#'+checkboxId).prop('checked')){
+            $('p[lunchbox-id="'+checkboxId+'"]').show();
+            $('p[lunchbox-id="'+checkboxId+'"]').html(checkboxItem);
+             score = parseFloat(checkboxScore)+score;
+            $('#total-score').html(score);
+       }
+       else{
+           $('p[lunchbox-id="'+checkboxId+'"]').hide();
+           score = score - checkboxScore;
+           $('#total-score').html(score);
+       }
+
+       });
+
+       });
+
+
+    </script>
+</head>
 <div class="content">
     <table class="table table-bordered">
         <thead>
@@ -9,6 +37,7 @@ endblock %} {% block body %}
             <th scope="col">Score</th>
             <th scope="col">Delete</th>
             <th scope="col">Edit</th>
+            <th scope="col">Select</th>
         </tr>
         {% for food in foods %}
         <tr>
@@ -20,10 +49,14 @@ endblock %} {% block body %}
                     <button name="delete" value="{{ food.id }}">delete</button>
                 </form>
             </td>
-             <td>
+            <td>
                 <form action="/edit/{{ food.id }}" method="GET">
                     <button name="edit" value="{{ food.id }}">Edit</button>
                 </form>
+            </td>
+            <td>
+                <input type="checkbox" class="checkbox" id={{ food.id }} score={{ food.score }}
+                       checkbox-item="{{food}}"/>
             </td>
         </tr>
         {% endfor %}
@@ -34,12 +67,26 @@ endblock %} {% block body %}
         </ul>
         </tbody>
     </table>
-    <form action="/" method="POST">
-        <label>Food:</label> <input type="text" name="food" id="food"/>
-        <label>Category:</label> <input type="text" name="category" id="category"/>
-        <label>Score:</label><input type="text" name="score" id="score"/>
+    <div class="card">
+        <div class="card-header">
+            <b>Current Lunch Box (Total Score - <a id="total-score" total-score>0</a>):</b>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                {% for food in foods %}<p lunchbox-id={{food.id}}></p>{% endfor %}
 
-        <input type="submit" value="add food"/>
-    </form>
+            </blockquote>
+        </div>
+    </div>
+    <div class="add-food">
+        <form action="/" method="POST">
+            <label>Food:</label> <input type="text" name="food" id="food"/>
+            <label>Category:</label> <input type="text" name="category" id="category"/>
+            <label>Score:</label><input type="text" name="score" id="score"/>
+            <input type="submit" value="add food"/>
+        </form>
+    </div>
+
 </div>
+
 {% endblock %}

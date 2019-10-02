@@ -1,8 +1,11 @@
 body {
-  margin: 0;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
 }
 .content {
-  margin: auto;
+  margin: 20px auto;
+}
+.add-food{
+  margin:20px auto;
 }
