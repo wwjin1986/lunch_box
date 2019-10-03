@@ -9,7 +9,7 @@ db = SQLAlchemy(app)
 
 
 class Foods(db.Model):
-    id = db.Column(db.Integer, primary_key=True, )
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     category = db.Column(db.String(200))
     score = db.Column(db.Integer)
@@ -21,6 +21,19 @@ class Foods(db.Model):
 
     def __repr__(self):
         return f"{self.name} {self.category} {self.score}"
+
+
+class Plans(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=True)
+    foods = db.Column(db.JSON, nullable=False)
+
+    def __init__(self, name, foods):
+        self.name = name;
+        self.foods = foods;
+
+    def __repr__(self):
+        return f"{self.name} {self.foods} "
 
 
 db.create_all()
@@ -66,6 +79,24 @@ def edit(id):
         food.category = request.form['category']
         food.score = request.form['score']
         try:
+            db.session.commit()
+            return redirect('/')
+        except Exception as ex:
+            return str(ex)
+
+
+@app.route("/add-plan", methods=['GET', 'POST'])
+def add_plan():
+    if request.method == 'GET':
+        foods = db.session.query(Foods).all()
+        return render_template("index.html", foods=foods)
+    else:
+        plan_name = request.form['plan-name']
+        form_foods = request.form['category']
+
+        new_food = Foods(name=form_food, category=form_category, score=form_score)
+        try:
+            db.session.add(new_food)
             db.session.commit()
             return redirect('/')
         except Exception as ex:

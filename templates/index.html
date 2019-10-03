@@ -4,14 +4,17 @@ endblock %} {% block body %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type=text/javascript>
       var score = 0;
+      var number = 1;
        $(document).ready(function(){
        $('.checkbox').on('change',function(){
        var checkboxId = $(this).attr('id');
        var checkboxScore = $(this).attr('score');
        var checkboxItem = $(this).attr('checkbox-item');
        if($('#'+checkboxId).prop('checked')){
+            $('#save-new-plan').prop('disabled',false);
             $('p[lunchbox-id="'+checkboxId+'"]').show();
-            $('p[lunchbox-id="'+checkboxId+'"]').html(checkboxItem);
+            $('p[lunchbox-id="'+checkboxId+'"]').html(number + ": "+checkboxItem);
+            number++;
              score = parseFloat(checkboxScore)+score;
             $('#total-score').html(score);
        }
@@ -19,11 +22,17 @@ endblock %} {% block body %}
            $('p[lunchbox-id="'+checkboxId+'"]').hide();
            score = score - checkboxScore;
            $('#total-score').html(score);
+           number--;
+           if(score == 0){
+                $('#save-new-plan').prop('disabled',true);
+
+           }
        }
 
        });
 
        });
+
 
 
     </script>
@@ -69,7 +78,7 @@ endblock %} {% block body %}
     </table>
     <div class="card">
         <div class="card-header">
-            <b>Current Lunch Box (Total Score - <a id="total-score" total-score>0</a>):</b>
+            <b>Add a new lunch box plan (Total Score - <a id="total-score" total-score>0</a>):</b>
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">
@@ -77,14 +86,29 @@ endblock %} {% block body %}
 
             </blockquote>
         </div>
+        <div class="card-body">
+            <div class="add-plan" >
+                <form action="/add-plan" method="GET">
+                <input type="text" size="50" name="plan-name" id="plan-name" placeholder="Please enter name for the new plan"/>
+                <input type="submit" value="Save new plan" id="save-new-plan" disabled="true"/></form></div>
+        </div>
     </div>
     <div class="add-food">
-        <form action="/" method="POST">
-            <label>Food:</label> <input type="text" name="food" id="food"/>
-            <label>Category:</label> <input type="text" name="category" id="category"/>
-            <label>Score:</label><input type="text" name="score" id="score"/>
-            <input type="submit" value="add food"/>
-        </form>
+        <div class="card">
+            <div class="card-header">
+                <b>Add new food</b>
+            </div>
+            <div class="card-body">
+                <form action="/" method="POST">
+                    <label>Food: </label> <input type="text" name="food" id="food"/>
+                    <label>Category: </label> <input type="text" name="category" id="category"/>
+                    <label>Score: </label><input type="text" name="score" id="score"/>
+                    <input type="submit" value="add food"/></form>
+
+            </div>
+        </div>
+
+
     </div>
 
 </div>
