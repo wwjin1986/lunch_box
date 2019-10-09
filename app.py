@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import JSON, func
 
@@ -92,7 +92,7 @@ def edit(id):
             return str(ex)
 
 
-@app.route("/plans", methods=['GET', 'POST'])
+@app.route("/plans/add", methods=['GET', 'POST'])
 def add_plan():
     if request.method == 'GET':
         return redirect('/')
@@ -100,28 +100,30 @@ def add_plan():
         plan = request.json
         plan_name = plan['planName']
         score = plan['score']
-        print(plan_name)
         for food in plan['selectedFoods']:
-            print(food)
             new_plan = Plans(name=plan_name, food=food, score=score)
             try:
                 db.session.add(new_plan)
                 db.session.commit()
-
             except Exception as ex:
                 return str(ex)
-    return redirect('/')
-
-
-@app.route("/plans/<int:id>", methods=['DELETE'])
-def delete(id):
-    plan_to_delete = Plans.query.get_or_404(id)
-    try:
-        db.session.delete(plan_to_delete)
-        db.session.commit()
         return redirect('/')
-    except Exception as ex:
-        return str(ex)
+
+
+@app.route("/plans/<string:name>", methods=['GET', 'POST'])
+def delete(name):
+    if request.method == 'GET':
+        return redirect('/')
+    else:
+        plans_to_delete = Plans.query.filter_by(name=name).all()
+        print(plans_to_delete)
+        for plan in plans_to_delete:
+            try:
+                db.session.delete(plan)
+                db.session.commit()
+            except Exception as ex:
+                return str(ex)
+        return redirect('/')
 
 
 if __name__ == "__main__":

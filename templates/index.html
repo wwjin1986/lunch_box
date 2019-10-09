@@ -7,7 +7,8 @@ endblock %} {% block body %}
       var score = 0;
       var number = 1;
       var selectedFoods=[];
-       $(document).ready(function(){  
+       $(document).ready(function(){
+
         //checkbox check/uncheck event
        $('.checkbox').on('change',function(){
        var checkboxId = $(this).attr('id');
@@ -39,22 +40,22 @@ endblock %} {% block body %}
        
        $('#save-new-plan').on('click', function(){
            var planName = $('#plan-name').val();
-           var data = {planName:planName,
-           selectedFoods:selectedFoods,score:score };
-           console.log(data);
+           var data = {planName:planName, selectedFoods:selectedFoods,score:score};
             $.ajax({
                 type:'POST',
-                url:'/plans',
+                url:'/plans/add',
                 data:JSON.stringify(data),
                 contentType: 'application/json;charset=UTF-8',
-                success:function(){
-                    alert('get');
+                complete: function(){
+                    location.reload();
                 },
-                error:function(){
-                    alert('error');
+                error: function(error){
+                    console.log(error);
                 }
             });
        });
+
+
 
 
 
@@ -97,10 +98,10 @@ endblock %} {% block body %}
                 <div class="add-plan">
                     <form>
                         <input type="text" size="50" name="plan-name" id="plan-name"
-                               placeholder="Please enter name for the new plan"/>
+                               placeholder="Please enter name for the new plan"/></form>
                         <input type="submit" value="save new plan" id="save-new-plan" disabled="true"/>
                 </div>
-                </form>
+
             </div>
         </div>
     </div>
@@ -158,12 +159,13 @@ endblock %} {% block body %}
                 </tr>
                 {% for plan in plans %}
                 <tr>
-                    <td>{{ plan.id }}</td>
                     <td>{{ plan.name }}</td>
                     <td>{{ plan.foods }}</td>
                     <td>{{ plan.score }}</td>
                     <td>
-                            <button name="delete-plan" plan-id="{{ plan.id }}" class="delete-plan">delete</button>
+                          <form action="/plans/{{ plan.name }}" method="POST">
+                            <button name="delete-plan" plan-name="{{ plan.name }}" class="delete-plan">delete</button>
+                          </form>
                     </td>
                     <td><i class="fa fa-heart-o" aria-hidden="true"></i>
                     </td>
