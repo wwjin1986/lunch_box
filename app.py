@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import JSON, func
 
 app = Flask(__name__)
 app.config[
@@ -26,14 +27,16 @@ class Foods(db.Model):
 class Plans(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=True)
-    foods = db.Column(db.JSON, nullable=False)
+    food = db.Column(db.String(200), nullable=True)
+    score = db.Column(db.Integer)
 
-    def __init__(self, name, foods):
-        self.name = name;
-        self.foods = foods;
+    def __init__(self, name, food, score):
+        self.name = name
+        self.food = food
+        self.score = score
 
     def __repr__(self):
-        return f"{self.name} {self.foods} "
+        return f"{self.name} {self.food} "
 
 
 db.create_all()
@@ -44,12 +47,16 @@ db.session.commit()
 def index():
     if request.method == 'GET':
         foods = db.session.query(Foods).all()
-        return render_template("index.html", foods=foods)
+        plans = db.session.query(func.min(Plans.id).label('id'), Plans.name,
+                                 func.group_concat(Plans.food.distinct()).label('foods'),
+                                 Plans.score).group_by(Plans.name)
+        return render_template("index.html", foods=foods, plans=plans)
     else:
         form_food = request.form['food']
         form_category = request.form['category']
         form_score = request.form['score']
-        new_food = Foods(name=form_food, category=form_category, score=form_score)
+        new_food = Foods(
+            name=form_food, category=form_category, score=form_score)
         try:
             db.session.add(new_food)
             db.session.commit()
@@ -58,8 +65,8 @@ def index():
             return str(ex)
 
 
-@app.route("/delete/<int:id>", methods=['GET', 'POST'])
-def delete(id):
+@app.route("/foods/<int:id>", methods=['GET', 'POST'])
+def delete_food(id):
     food_to_delete = Foods.query.get_or_404(id)
     try:
         db.session.delete(food_to_delete)
@@ -85,22 +92,36 @@ def edit(id):
             return str(ex)
 
 
-@app.route("/add-plan", methods=['GET', 'POST'])
+@app.route("/plans", methods=['GET', 'POST'])
 def add_plan():
     if request.method == 'GET':
-        foods = db.session.query(Foods).all()
-        return render_template("index.html", foods=foods)
+        return redirect('/')
     else:
-        plan_name = request.form['plan-name']
-        form_foods = request.form['category']
+        plan = request.json
+        plan_name = plan['planName']
+        score = plan['score']
+        print(plan_name)
+        for food in plan['selectedFoods']:
+            print(food)
+            new_plan = Plans(name=plan_name, food=food, score=score)
+            try:
+                db.session.add(new_plan)
+                db.session.commit()
 
-        new_food = Foods(name=form_food, category=form_category, score=form_score)
-        try:
-            db.session.add(new_food)
-            db.session.commit()
-            return redirect('/')
-        except Exception as ex:
-            return str(ex)
+            except Exception as ex:
+                return str(ex)
+    return redirect('/')
+
+
+@app.route("/plans/<int:id>", methods=['DELETE'])
+def delete(id):
+    plan_to_delete = Plans.query.get_or_404(id)
+    try:
+        db.session.delete(plan_to_delete)
+        db.session.commit()
+        return redirect('/')
+    except Exception as ex:
+        return str(ex)
 
 
 if __name__ == "__main__":

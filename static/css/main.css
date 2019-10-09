@@ -6,6 +6,11 @@ body {
 .content {
   margin: 20px auto;
 }
-.add-food{
-  margin:20px auto;
+
+.align-left{
+  float: left;
+  width: 50%;
+}
+.align-right{
+  float: right;
 }
