@@ -63,6 +63,7 @@ endblock %} {% block body %}
 
 
 
+
     </script>
 </head>
 <div class="content">
@@ -99,7 +100,7 @@ endblock %} {% block body %}
                     <form>
                         <input type="text" size="50" name="plan-name" id="plan-name"
                                placeholder="Please enter name for the new plan"/></form>
-                        <input type="submit" value="save new plan" id="save-new-plan" disabled="true"/>
+                    <input type="submit" value="save new plan" id="save-new-plan" disabled="true"/>
                 </div>
 
             </div>
@@ -154,7 +155,7 @@ endblock %} {% block body %}
                     <th scope="col">Foods</th>
                     <th scope="col">Score</th>
                     <th scope="col">Delete</th>
-                    <th scope="col">Like</th>
+<!--                    <th scope="col">Like</th>-->
 
                 </tr>
                 {% for plan in plans %}
@@ -163,12 +164,11 @@ endblock %} {% block body %}
                     <td>{{ plan.foods }}</td>
                     <td>{{ plan.score }}</td>
                     <td>
-                          <form action="/plans/{{ plan.name }}" method="POST">
+                        <form action="/plans/{{ plan.name }}" method="POST">
                             <button name="delete-plan" plan-name="{{ plan.name }}" class="delete-plan">delete</button>
-                          </form>
+                        </form>
                     </td>
-                    <td><i class="fa fa-heart-o" aria-hidden="true"></i>
-                    </td>
+<!--                    <td><i class="fa fa-heart-o" aria-hidden="true"></i></td>-->
 
                 </tr>
                 {% endfor %}
